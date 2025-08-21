@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Grader</title>
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        max-width: 400px;
+        width: 100%;
+        text-align: center;
+        backdrop-filter: blur(10px);
+        
+    }
+
+    h1 {
+        margin-bottom: 20px;
+        font-size: 1.8rem;
+    }
+
+    input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        border-radius: 8px;
+        border: none;
+        outline: none;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        background: #00c6ff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    button:hover {
+        background: #0072ff;
+    }
+
+    .result {
+        margin-top: 20px;
+        padding: 15px;
+        background: rgba(0,0,0,0.2);
+        border-radius: 8px;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    @media (max-width: 500px) {
+        h1 {
+            font-size: 1.5rem;
+        }
+        .container {
+            padding: 20px;
+        }
+    }
+</style>
+</head>
+<body>
+    <main class="container">
+        <h1>🎓 Grader</h1>
+        <input type="number" id="score" placeholder="Enter your score (0 - 100)" min="0" max="100" />
+        <button onclick="calculateGrade()">Get Grade</button>
+        <div id="output" class="result">Your grade will appear here</div>
+    </main>
+
+<script>
+function calculateGrade() {
+    let score = document.getElementById('score').value;
+    let output = document.getElementById('output');
+
+    if (score === '') {
+        output.textContent = "Please enter a score.";
+        return;
+    }
+
+    score = Number(score);
+
+    if (score < 0 || score > 100) {
+        output.textContent = "Score must be between 0 and 100.";
+        return;
+    }
+
+    let grade;
+    if (score >= 70) grade = 'A';
+    else if (score >= 60) grade = 'B';
+    else if (score >= 50) grade = 'C';
+    else if (score >= 45) grade = 'D';
+    else if (score >= 40) grade = 'E';
+    else grade = 'F';
+
+    output.textContent = `Grade: ${grade}`;
+}
+</script>
+</body>
+</html>
