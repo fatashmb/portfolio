@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOSU Admission Cut-Off Search</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #004080;
+    }
+    input {
+      display: block;
+      margin: 20px auto;
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .result {
+      margin: 20px auto;
+      padding: 15px;
+      max-width: 600px;
+      background: #e6f2ff;
+      border: 1px solid #004080;
+      border-radius: 5px;
+      display: none;
+    }
+    .programme {
+      margin-bottom: 15px;
+      padding: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    .not-found {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>BOSU Admission Cut-Off Marks (2025/2026)</h1>
+
+  <input type="text" id="searchBox" placeholder="Enter programme name (e.g. Biology, Computer Science)">
+  
+  <div id="output" class="result"></div>
+
+  <script>
+    // Data: Faculties with Programmes inside arrays
+    const faculties = [
+      {
+        name: "Faculty of Basic Medical & Allied Health Sciences",
+        programmes: [
+          { name: "MBBS Medicine & Surgery", merit: 250, others: 210 },
+          { name: "B.NSC Nursing Science", merit: 230, others: 190 },
+          { name: "D.PT Physiotherapy", merit: 220, others: 180 },
+          { name: "B.RAD Radiography", merit: 220, others: 180 },
+          { name: "B.MLS Medical Laboratory Science", merit: 220, others: 180 },
+          { name: "HMIS Health Information Management System", merit: 220, others: 180 }
+        ]
+      },
+      {
+        name: "Faculty of Agriculture",
+        programmes: [
+          { name: "B. Agriculture", merit: 170, others: 150 }
+        ]
+      },
+      {
+        name: "Faculty of Arts & Education",
+        programmes: [
+          { name: "B.A. English", merit: 170, others: 150 },
+          { name: "B.A. English (Literature)", merit: 170, others: 150 },
+          { name: "B.A. Islamic Studies", merit: 170, others: 150 },
+          { name: "B.A. Education/English", merit: 170, others: 150 },
+          { name: "B.A. Education/Islamic Studies", merit: 170, others: 150 },
+          { name: "B.A. (Ed) Education/Economics", merit: 170, others: 150 },
+          { name: "B.Sc.(Ed.) Education/Biology", merit: 170, others: 150 },
+          { name: "B.Sc.(Ed.) Education/Chemistry", merit: 170, others: 150 },
+          { name: "B.Sc.(Ed.) Education/Mathematics", merit: 170, others: 150 },
+          { name: "B.Sc.(Ed.) Education/Physics", merit: 170, others: 150 },
+          { name: "B.Sc.(Ed.) Education/Computer Science", merit: 180, others: 160 }
+        ]
+      },
+      {
+        name: "Faculty of Social & Management Sciences",
+        programmes: [
+          { name: "B.Sc. Accounting", merit: 170, others: 150 },
+          { name: "B.Sc. Business Administration", merit: 170, others: 150 },
+          { name: "B.Sc. Economics", merit: 170, others: 150 },
+          { name: "B.Sc. Geography", merit: 170, others: 150 },
+          { name: "B.Sc. Mass Communication", merit: 170, others: 150 },
+          { name: "B.Sc. Political Science", merit: 170, others: 150 },
+          { name: "B.Sc. Peace Studies & Conflict Resolution", merit: 170, others: 150 },
+          { name: "B.Sc. Public Administration", merit: 170, others: 150 },
+          { name: "B.Sc. Sociology", merit: 170, others: 150 },
+          { name: "B.Sc. Criminology & Security Studies", merit: 170, others: 150 }
+        ]
+      },
+      {
+        name: "Faculty of Science",
+        programmes: [
+          { name: "B.Sc. Biotechnology", merit: 190, others: 170 },
+          { name: "B.Sc. Plant Science & Biotechnology", merit: 170, others: 150 },
+          { name: "B.Sc. Animal & Environmental Biology", merit: 170, others: 150 },
+          { name: "B.Sc. Chemistry", merit: 170, others: 150 },
+          { name: "B.Sc. Computer Science", merit: 190, others: 170 },
+          { name: "B.Sc. Mathematics", merit: 170, others: 150 },
+          { name: "B.Sc. Statistics", merit: 170, others: 150 },
+          { name: "B.Sc. Physics", merit: 170, others: 150 },
+          { name: "B.Sc. Biochemistry", merit: 170, others: 150 }
+        ]
+      }
+    ];
+
+    // Function to search programme across all faculties (partial match)
+    function searchProgramme(query) {
+      const results = [];
+      for (let faculty of faculties) {
+        for (let programme of faculty.programmes) {
+          if (programme.name.toLowerCase().includes(query.toLowerCase())) {
+            results.push({ ...programme, faculty: faculty.name });
+          }
+        }
+      }
+      return results;
+    }
+
+    // Add search functionality
+    const searchBox = document.getElementById("searchBox");
+    const output = document.getElementById("output");
+
+    searchBox.addEventListener("keyup", () => {
+      const query = searchBox.value.trim();
+      if (query.length > 0) {
+        const results = searchProgramme(query);
+        if (results.length > 0) {
+          output.style.display = "block";
+          output.innerHTML = results.map(result => `
+            <div class="programme">
+              <h3>${result.name}</h3>
+              <p><strong>Faculty:</strong> ${result.faculty}</p>
+              <p><strong>Merit Score:</strong> ${result.merit}</p>
+              <p><strong>Others Score:</strong> ${result.others}</p>
+            </div>
+          `).join("");
+        } else {
+          output.style.display = "block";
+          output.innerHTML = `<p class="not-found">No matching programme found.</p>`;
+        }
+      } else {
+        output.style.display = "none";
+      }
+    });
+  </script>
+</body>
+</html>
